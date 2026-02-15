@@ -1,0 +1,38 @@
+<h1>🛍️ Магазин</h1>
+
+{% if user.is_authenticated %}
+<p>Вы вошли как {{ user.email }} |
+<a href="/accounts/profile/">Профиль</a></p>
+{% else %}
+<p><a href="/accounts/login/">Войти</a></p>
+{% endif %}
+
+<hr>
+
+<h2>Категории</h2>
+
+<a href="/">Все товары</a><br><br>
+
+{% for cat in categories %}
+    <a href="/?category={{ cat.id }}">{{ cat.name }}</a><br>
+{% endfor %}
+
+<hr>
+
+<h2>Товары</h2>
+
+{% for product in products %}
+    <div style="margin-bottom:25px;">
+        <h3>
+            <a href="{% url 'product_detail' product.id %}">
+                {{ product.name }}
+            </a>
+        </h3>
+
+        <p>{{ product.description }}</p>
+        <p><strong>{{ product.price }} €</strong></p>
+        <p>Категория: {{ product.category.name }}</p>
+    </div>
+{% empty %}
+    <p>В этой категории пока нет товаров</p>
+{% endfor %}

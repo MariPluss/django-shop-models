@@ -1,55 +1,112 @@
-# Django Shop Models (DZ Lite)
+# 🛒 Django Shop (Models + Views)
 
-Домашнее задание по теме **Django Models и ORM**
+Учебный проект интернет-магазина на Django.  
+Реализованы модели, регистрация пользователей, каталог товаров и отзывы.
 
-## Реализовано
+---
 
-Созданы модели интернет-магазина:
+## 🚀 Функционал проекта
 
-- Category — категории товаров
-- Product — товары
-- Order — заказы пользователей
-- OrderItem — товары в заказе
-- Review — отзывы
-- Использована встроенная модель User
+### 👤 Пользователи
+- Регистрация пользователя  
+- Вход / выход из аккаунта  
+- Страница профиля
 
-## Связи между моделями
+### 🛍 Магазин
+- Главная страница со списком товаров  
+- Фильтр товаров по категориям  
+- Страница товара  
+- Система отзывов  
+- Авторизованные пользователи могут оставлять отзывы
 
-- Product → Category (ForeignKey)
-- Order → User (ForeignKey)
-- OrderItem → Order + Product (ForeignKey)
-- Review → Product + User (ForeignKey)
+### ⚙️ Админка
+Через Django Admin можно управлять:
+- пользователями
+- категориями
+- товарами
+- заказами
+- отзывами
 
-## Meta классы
+---
 
-Использованы:
-- ordering
-- verbose_name
-- verbose_name_plural
+## 🧱 Используемые технологии
 
-## Админка Django
+- Python 3
+- Django 5
+- SQLite
+- HTML (Django Templates)
 
-Модели зарегистрированы в admin.py  
-Добавлены:
-- list_display
-- list_filter
-- search_fields
-- Inline для OrderItem
+---
 
-## Работа через Django ORM (shell)
+## 📦 Модели проекта
 
-В Django shell были выполнены операции:
+### Category
+Категории товаров
+- name
+- description
 
-- создание категории
-- создание товара
-- получение и фильтрация товаров
-- создание заказа
-- добавление товара в заказ
-- создание отзыва
-- получение отзывов
+### Product
+Товар магазина
+- name
+- description
+- price
+- image
+- category
+- created_at
 
-## Запуск проекта
+### Order
+Заказ пользователя
+- user
+- created_at
+- is_paid
+
+### OrderItem
+Товар в заказе
+- order
+- product
+- quantity
+
+### Review
+Отзывы на товары
+- product
+- user
+- rating
+- comment
+- created_at
+
+---
+
+## 🔐 Авторизация
+
+Используется кастомная модель пользователя:
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+Страницы:
+- /accounts/register/
+- /accounts/login/
+- /accounts/profile/
+
+---
+
+## 🌐 Основные страницы сайта
+
+| Страница | URL |
+|---|---|
+| Главная | / |
+| Товар | /product/<id>/ |
+| Регистрация | /accounts/register/ |
+| Вход | /accounts/login/ |
+| Профиль | /accounts/profile/ |
+| Админка | /admin/ |
+
+---
+
+## ▶️ Запуск проекта
 
 ```bash
+python -m venv venv
+venv\Scripts\activate
+pip install django pillow
 python manage.py migrate
+python manage.py createsuperuser
 python manage.py runserver

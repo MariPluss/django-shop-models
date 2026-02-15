@@ -1,0 +1,36 @@
+<a href="/">← Назад в магазин</a>
+
+<h1>{{ product.name }}</h1>
+
+<p>{{ product.description }}</p>
+<p><strong>Цена: {{ product.price }} €</strong></p>
+<p>Категория: {{ product.category.name }}</p>
+<hr>
+<h2>Отзывы</h2>
+
+{% if reviews %}
+    {% for review in reviews %}
+        <p><b>{{ review.user.email }}</b> — ⭐ {{ review.rating }}</p>
+        <p>{{ review.comment }}</p>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>Отзывов пока нет</p>
+{% endif %}
+
+{% if user.is_authenticated %}
+    <h3>Оставить отзыв</h3>
+    <form method="post">
+        {% csrf_token %}
+        <p>Оценка:</p>
+        <input type="number" name="rating" min="1" max="5" required>
+
+        <p>Комментарий:</p>
+        <textarea name="comment" required></textarea>
+
+        <br><br>
+        <button type="submit">Отправить отзыв</button>
+    </form>
+{% else %}
+    <p>Чтобы оставить отзыв — войдите в аккаунт</p>
+{% endif %}

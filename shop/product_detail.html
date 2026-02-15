@@ -1,0 +1,64 @@
+<a href="/">← Назад в магазин</a>
+
+<h1>{{ product.name }}</h1>
+<p>{{ product.description }}</p>
+<p><b>Цена: {{ product.price }} €</b></p>
+<p>Категория: {{ product.category.name }}</p>
+
+<hr>
+
+<h2>Отзывы</h2>
+
+{% for review in reviews %}
+<p>
+    ⭐ {{ review.rating }}/5 <br>
+    {{ review.comment }} <br>
+    <small>Автор: {{ review.user.email }}</small>
+</p>
+<hr>
+{% empty %}
+<p>Отзывов пока нет 😔</p>
+{% endfor %}
+
+<hr>
+
+{% if user.is_authenticated %}
+<h2>Оставить отзыв</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+
+{% else %}
+<p>Чтобы оставить отзыв — <a href="{% url 'login' %}">войдите</a></p>
+{% endif %}
+<hr>
+
+<h2>Отзывы</h2>
+
+{% for review in product.reviews.all %}
+    <p>
+        ⭐ {{ review.rating }} / 5<br>
+        {{ review.comment }}<br>
+        <small>Автор: {{ review.user.email }}</small>
+    </p>
+    <hr>
+{% empty %}
+    <p>Отзывов пока нет 😔</p>
+{% endfor %}
+
+
+{% if user.is_authenticated %}
+    <h3>Оставить отзыв</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+    </form>
+
+{% else %}
+    <p>Чтобы оставить отзыв — войдите в аккаунт.</p>
+{% endif %}

@@ -1,6 +1,6 @@
 # 🛒 Django Shop (Models + Views)
 
-Учебный проект интернет-магазина на Django.  
+Учебный проект интернет-магазина на Django.
 Реализованы модели, регистрация пользователей, каталог товаров и отзывы.
 
 ---
@@ -8,96 +8,95 @@
 ## 🚀 Функционал проекта
 
 ### 👤 Пользователи
-- Регистрация пользователя  
-- Вход / выход из аккаунта  
-- Страница профиля
+
+* Регистрация пользователя
+* Вход / выход из аккаунта
+* Страница профиля
 
 ### 🛍 Магазин
-- Главная страница со списком товаров  
-- Фильтр товаров по категориям  
-- Страница товара  
-- Система отзывов  
-- Авторизованные пользователи могут оставлять отзывы
+
+* Главная страница со списком товаров
+* Фильтр товаров по категориям
+* Страница товара
+* Система отзывов
+* Авторизованные пользователи могут оставлять отзывы
 
 ### ⚙️ Админка
+
 Через Django Admin можно управлять:
-- пользователями
-- категориями
-- товарами
-- заказами
-- отзывами
+
+* пользователями
+* категориями
+* товарами
+* заказами
+* отзывами
 
 ---
 
 ## 🧱 Используемые технологии
 
-- Python 3
-- Django 5
-- SQLite
-- HTML (Django Templates)
+* Python 3
+* Django 5
+* SQLite
+* HTML (Django Templates)
 
 ---
 
 ## 📦 Модели проекта
 
 ### Category
-Категории товаров
-- name
-- description
+
+* name
+* description
 
 ### Product
-Товар магазина
-- name
-- description
-- price
-- image
-- category
-- created_at
+
+* name
+* description
+* price
+* image
+* category
+* stock
+* created_at
 
 ### Order
-Заказ пользователя
-- user
-- created_at
-- is_paid
+
+* user
+* created_at
+* is_paid
 
 ### OrderItem
-Товар в заказе
-- order
-- product
-- quantity
+
+* order
+* product
+* quantity
 
 ### Review
-Отзывы на товары
-- product
-- user
-- rating
-- comment
-- created_at
+
+* product
+* user
+* rating
+* comment
+* created_at
+
+### Cart (Бонус)
+
+* user
+* created_at
+
+### CartItem (Бонус)
+
+* cart
+* product
+* quantity
 
 ---
 
 ## 🔐 Авторизация
 
 Используется кастомная модель пользователя:
+
 AUTH_USER_MODEL = 'accounts.CustomUser'
-
-Страницы:
-- /accounts/register/
-- /accounts/login/
-- /accounts/profile/
-
----
-
-## 🌐 Основные страницы сайта
-
-| Страница | URL |
-|---|---|
-| Главная | / |
-| Товар | /product/<id>/ |
-| Регистрация | /accounts/register/ |
-| Вход | /accounts/login/ |
-| Профиль | /accounts/profile/ |
-| Админка | /admin/ |
 
 ---
 
@@ -106,72 +105,116 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 ```bash
 python -m venv venv
 venv\Scripts\activate
-pip install django pillow
+pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
-
-
-## Доработка по комментариям куратора
-
-Задание выполнено в полном объеме:
-
-- Добавлен Meta-класс в Product (db_table, unique_together)
-- Реализован метод total_price в Order
-- Выполнены ORM-запросы через Django Shell
-- Добавлено поле stock и выполнен запрос товаров с количеством > 10
-- Реализованы модели Cart и CartItem
+```
 
 ---
 
-# 🧪 Часть PRO — Работа с Meta, ORM и корзиной
+# 🧪 Часть PRO — Выполнение требований куратора
 
 ## 🔹 Meta в модели Product
-
-Реализовано:
 
 ```python
 class Meta:
     db_table = "shop_products"
     unique_together = ("category", "name")
+```
 
-    def total_price(self):
+✔ Название товара уникально в рамках категории
+✔ Таблица БД переименована в `shop_products`
+
+---
+
+## 🔹 Метод total_price() в Order
+
+```python
+def total_price(self):
     return sum(item.product.price * item.quantity for item in self.items.all())
+```
 
-    order.total_price()
+### Проверка в Django Shell
 
-    Decimal('3198.00')
+```python
+order.total_price()
+```
 
-    Category.objects.get_or_create(name="Телефоны")
+Результат:
+
+```
+Decimal('3198.00')
+```
+
+---
+
+## 🔹 Работа с Django ORM (Shell)
+
+### Создание категорий и товаров
+
+```python
+Category.objects.get_or_create(name="Телефоны")
 Category.objects.get_or_create(name="Ноутбуки")
+```
 
+---
+
+### Получить товары из категории
+
+```python
+Product.objects.filter(category__name="Телефоны")
+```
+
+Результат:
+
+```
 <QuerySet [<Product: iPhone 15>]>
+```
 
+---
+
+### Получить все заказы пользователя
+
+```python
+Order.objects.filter(user=u)
+```
+
+---
+
+### Получить отзывы для товара
+
+```python
 Review.objects.filter(product__name="MacBook Air M2")
+```
 
+Результат:
+
+```
 <QuerySet [<Review: Отзыв от marinadesigne@inbox.lv>, <Review: Отзыв от test@test.com>]>
+```
 
+---
+
+### Товары с количеством на складе > 10
+
+```python
 Product.objects.filter(stock__gt=10)
+```
 
+Результат:
+
+```
 <QuerySet [<Product: iPhone 15>, <Product: MacBook Air M2>]>
+```
 
-🛒 Бонус — Реализована корзина
+---
 
-Добавлены модели:
+## 🛒 Бонус
 
-Cart
+Реализованы модели:
 
-user
-
-created_at
-
-CartItem
-
-cart
-
-product
-
-quantity
+* Cart
+* CartItem
 
 Миграции выполнены успешно.
-

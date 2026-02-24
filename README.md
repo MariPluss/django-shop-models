@@ -121,3 +121,57 @@ python manage.py runserver
 - Выполнены ORM-запросы через Django Shell
 - Добавлено поле stock и выполнен запрос товаров с количеством > 10
 - Реализованы модели Cart и CartItem
+
+---
+
+# 🧪 Часть PRO — Работа с Meta, ORM и корзиной
+
+## 🔹 Meta в модели Product
+
+Реализовано:
+
+```python
+class Meta:
+    db_table = "shop_products"
+    unique_together = ("category", "name")
+
+    def total_price(self):
+    return sum(item.product.price * item.quantity for item in self.items.all())
+
+    order.total_price()
+
+    Decimal('3198.00')
+
+    Category.objects.get_or_create(name="Телефоны")
+Category.objects.get_or_create(name="Ноутбуки")
+
+<QuerySet [<Product: iPhone 15>]>
+
+Review.objects.filter(product__name="MacBook Air M2")
+
+<QuerySet [<Review: Отзыв от marinadesigne@inbox.lv>, <Review: Отзыв от test@test.com>]>
+
+Product.objects.filter(stock__gt=10)
+
+<QuerySet [<Product: iPhone 15>, <Product: MacBook Air M2>]>
+
+🛒 Бонус — Реализована корзина
+
+Добавлены модели:
+
+Cart
+
+user
+
+created_at
+
+CartItem
+
+cart
+
+product
+
+quantity
+
+Миграции выполнены успешно.
+

@@ -110,3 +110,14 @@ pip install django pillow
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
+
+
+## Доработка по комментариям куратора
+
+Задание выполнено в полном объеме:
+
+- Добавлен Meta-класс в Product (db_table, unique_together)
+- Реализован метод total_price в Order
+- Выполнены ORM-запросы через Django Shell
+- Добавлено поле stock и выполнен запрос товаров с количеством > 10
+- Реализованы модели Cart и CartItem

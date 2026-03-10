@@ -218,3 +218,18 @@ Product.objects.filter(stock__gt=10)
 * CartItem
 
 Миграции выполнены успешно.
+
+
+## 📂 Структура проекта
+
+django-shop-models/
+│
+├── accounts/        # приложение пользователей
+├── shop/            # приложение магазина
+├── config/          # настройки Django
+│
+├── manage.py
+├── requirements.txt
+└── README.md
+
+
